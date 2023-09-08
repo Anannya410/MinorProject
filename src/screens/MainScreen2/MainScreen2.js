@@ -220,10 +220,7 @@ const renderItem = ({ item }) => (
       { enableHighAccuracy: true, timeout: 15000, maximumAge: 10000 },
     );
   };
-
-
-
-  const handleMapLongPress = event => {
+const handleMapLongPress = event => {
     if (mapping) {
       const { latitude, longitude } = event.nativeEvent.coordinate;
       setSelectedCoordinate({ latitude, longitude });
@@ -235,7 +232,8 @@ const renderItem = ({ item }) => (
       setShowMarkedLocationModal(true);
     }
   };
-  const handleMapPress = event => {
+
+const handleMapPress = event => {
     if (isDrawingEnabled) {
       if (mapping && markers.length < 16) {
         const { latitude, longitude } = event.nativeEvent.coordinate;
@@ -335,48 +333,87 @@ const renderItem = ({ item }) => (
 
   const fetchDataAndDisplayOnMap = async () => {
     const data = await fetchDataFromBackend();
-    displayDataOnMap(data);
     console.log(data);
+    displayDataOnMap(data);
   };
 
-  const fetchDataFromBackend = async (latitude, longitude) => {
-    if (typeof latitude === 'number' && typeof longitude === 'number' && !isNaN(latitude) && !isNaN(longitude)) {
-    const formattedLatitude = latitude.toFixed(4);
-    const formattedLongitude = longitude.toFixed(4);
-    console.log(formattedLatitude, formattedLongitude);
+//   const fetchDataFromBackend = async (latitude, longitude) => {
+//     if (typeof latitude === 'number' && typeof longitude === 'number' && !isNaN(latitude) && !isNaN(longitude)) {
+//     const formattedLatitude = latitude.toFixed(6);
+//     const formattedLongitude = longitude.toFixed(6);
+//     console.log(formattedLatitude, formattedLongitude);
     
-    const requestOptions = {
-      method: 'POST',
-      headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        latitude: formattedLatitude,
-        longitude: formattedLongitude,
-      }),
-    };
+//     const requestOptions = {
+//       method: 'POST',
+//       headers: {
+//         'Accept': 'application/json',
+//         'Content-Type': 'application/json',
+//       },
+//       body: JSON.stringify({
+//         latitude: formattedLatitude,
+//         longitude: formattedLongitude,
+//       }),
+//     };
     
-    try {
-      const response = await fetch('http://192.168.97.162/IntegrateGIS/getLocation.php',requestOptions);
-      const responseData = await response.json();
-      console.log('District retrieved:', responseData);
-    } catch (error) {
-      console.log('Error fetching data:', error);
-    }    
+//     try {
+//       const response = await fetch('http://192.168.97.162/IntegrateGIS/getLocation.php',requestOptions);
+//       const data = await response.json();
+
+//       console.log('District retrieved:',data);
+//       return data;
+
+//     } catch (error) {
+//       console.log('Error fetching data:', error);
+//       return null;
+//     }    
+//   }
+// };
+
+
+const fetchDataFromBackend = async () => {
+  try {
+    const response = await fetch('http://192.168.97.162/IntegrateGIS/getLocation.php');
+    const data = await response.json();
+
+    console.log('Raw Response:', data);
+    return data;
+  } catch (error) {
+    console.log('Error fetching data:', error);
+    return null;
+  }
+//   if (data.success) {
+//     return data; 
+//   } else {
+//     console.error('Backend error:', data.message);
+//     return null; 
+//   }
+// } catch (error) {
+//   console.log('Error fetching data:', error);
+//   return null; 
+// }
+};
+
+const drawPolygon = () => {
+  if(DACdataInvalid){
+  if (markers.length >= 3) {
+    const coordinates = markers.map(marker => ({
+      latitude: marker.latitude,
+      longitude: marker.longitude,
+    }));
+    setDrawPolygonCoordinates(coordinates);
+  }
+ }
+  else {
+    setDrawPolygonCoordinates([]);
   }
 };
-  
 
   const displayDataOnMap = (data) => {
-    // if (!data) {
-    //   console.log('Invalid data received from backend');
-    //   //setDACdataInvalid(true);
-    //   //console.log(DataInvalid);
-    //   return;
-    // }
-   // setDacValue(data.dac);
-    //  Alert.alert('DAC: ' + data.dac);
+    ///if (!data || !data.geom) {
+    if(false){  
+      console.error('Invalid data received from backend');
+      return;
+    }
     let coordinates;
     try {
       const parsedGeom = JSON.parse(data.geom);
@@ -407,6 +444,7 @@ const renderItem = ({ item }) => (
       longitude,
       color: markerColor,
     }));
+
     setPolygonMarkers(prevMarkers => [...prevMarkers, ...newMarkers]);
     console.log('Polygon Coordinates:', polygonCoordinates);
     console.log('Poly length', polygonCoordinates.length);
@@ -429,6 +467,7 @@ const renderItem = ({ item }) => (
       console.log('Poly length', polygonCoordinates.length);
     }
   };
+
   const handleMapReset = () => {
     setMapping(false);
     setBoundaryMarkers([]);
@@ -578,6 +617,16 @@ const renderItem = ({ item }) => (
 
             />
            }
+           
+          {drawpolygonCoordinates.length >= 3 && (
+            <Polygon
+              coordinates={drawpolygonCoordinates}
+              strokeWidth={2}
+              fillColor="rgba(255, 10, 10,0.5)"
+              zIndex={5}
+              fillOpacity={0.35}
+            />
+          )}
         </MapView>
 
       </View>
@@ -652,15 +701,15 @@ const renderItem = ({ item }) => (
         <View style={styles.locationContainer}>
           <Animated.View style={[styles.footerContent, { transform: [{ translateY: footerPosition }] }]}>
             <Text style={styles.markedLocationText}>
-              Current Location: {mLat !== null ? mLat.toFixed(4) : 28.6139}°N,{' '}
+              Current Location: {mLat !== null ? mLat.toFixed(6) : 28.6139}°N,{' '}
               {mLong !== null ? mLong.toFixed(4) : 77.209}°E
             </Text>
             {selectedLocations.length > 0 && (
               <>
                 <View style={styles.line} />
                 <Text style={styles.markedLocationText}>
-                  Marked Location: {selectedLocations[selectedLocations.length - 1].latitude.toFixed(3)}°N,{' '}
-                  {selectedLocations[selectedLocations.length - 1].longitude.toFixed(4)}° E
+                  Marked Location: {selectedLocations[selectedLocations.length - 1].latitude.toFixed(6)}°N,{' '}
+                  {selectedLocations[selectedLocations.length - 1].longitude.toFixed(6)}° E
                 </Text>
               </>
             )}

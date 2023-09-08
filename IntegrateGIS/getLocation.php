@@ -2,39 +2,31 @@
 
 include_once("connection.php");
 
-
-function test_input($data) {
-    // Implement your custom sanitization logic here if needed
-    return $data;
-}
-
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
-
     $latitude = test_input($_POST["latitude"]);
     $longitude = test_input($_POST["longitude"]);
 
+    $query = "SELECT dist_name, state_name FROM public.india_districts WHERE ST_Within(ST_SetSRID(ST_MakePoint($longitude, $latitude), 0), geom)";
+    $stmt = pg_prepare($dbconn, "fetch_district_info", $query);
+    $result = pg_execute($dbconn, "fetch_district_info", array($longitude, $latitude));
 
-    $query = "SELECT ST_AsGeoJSON(geom) FROM jamalpur_dac WHERE ST_Within(ST_SetSRID(ST_MakePoint($1, $2), 4326), geom)";
-    $stmt = pg_prepare($dbconn, "fetch_dac_data", $query);
-    $result = pg_execute($dbconn, "fetch_dac_data", array($longitude, $latitude));
-
-    
     if ($result) {
-        // Fetch all the rows returned by the query
-        $dacData = array();
+        $Data = array();
         while ($row = pg_fetch_assoc($result)) {
-            $dacData[] = $row;
+            $Data[] = $row;
         }
 
-        echo json_encode(["success" => true, "data" => $dacData]);
+        if (empty($Data)) {
+            echo json_encode(["success" => false, "message" => "No matching district found."]);
+        } else {
+            echo json_encode(["success" => true, "data" => $Data]);
+        }
     } else {
-    
-        echo json_encode(["success" => false, "message" => "Error fetching DAC data"]);
+        echo json_encode(["success" => false, "message" => "Error fetching district data"]);
     }
 } else {
-
     echo json_encode(["success" => false, "message" => "Invalid request method"]);
 }
-
 pg_close($dbconn);
 ?>
+

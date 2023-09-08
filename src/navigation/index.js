@@ -23,6 +23,7 @@ import WeatherScreen from '../screens/WeatherScreen/WeatherScreen';
 import BottomNavigator from '../screens/BottomNavigator/BottomNavigator.js';
 import IdentifyPlant from '../screens/IdentifyPlant/IdentifyPlant.js';
 import LandingPage from '../screens/LandingPage/LandingPage.js';
+import PlantData from '../screens/PlantData/PlantData';
 
 const Stack = createNativeStackNavigator();
 const Navigation = () => {
@@ -49,9 +50,11 @@ const Navigation = () => {
         <Stack.Screen name= "Weather" component = {WeatherScreen}/>
         <Stack.Screen name= "Bottom" component = {BottomNavigator}/>
         <Stack.Screen name = "Identify" component = {IdentifyPlant}/>
-        <Stack.Screen name = "Land" component = {LandingPage}/>
+        <Stack.Screen name = "LandingPage" component = {LandingPage}/>
+        <Stack.Screen name = "PlantData" component = {PlantData}/>
       </Stack.Navigator>
     </NavigationContainer>
+    
   );
 };
 
