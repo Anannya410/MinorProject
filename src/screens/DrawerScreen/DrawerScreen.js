@@ -5,44 +5,16 @@ import { useNavigation } from '@react-navigation/native';
 import { createDrawerNavigator, DrawerContentScrollView, DrawerItemList } from '@react-navigation/drawer';
 import SupportScreen from '../SupportScreen/SupportScreen';
 import AboutScreen from '../AboutScreen/AboutScreen';
-import MainScreen from '../MainScreen/MainScreen';
+import MainScreen from '../LandingPage/LandingPage';
 import SignOutScreen from '../SignOutScreen/SignOutScreen';
 import UserScreen from '../UserScreen/UserScreen';
 import MainScreen2 from '../MainScreen2/MainScreen2.js';
-const Drawer = createDrawerNavigator();
 import Logo from '../../../assets/Images/plantlogo.png';
 import LogoName from "../../../assets/Images/logoName.png";
 import Terms_PrivacyScreen from '../Terms_PrivacyScreen/Terms_PrivacyScreen';
 
-const styles = StyleSheet.create({
-  drawerItemContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginBottom: 20,
-    marginLeft: 16,
-  },
-  drawerItemText: {
-    fontSize: 16,
-    color: '#333',
-    marginLeft: 16,
-  },
-  footer: {
-    alignItems: 'center',
-    paddingVertical: 150,
-    //backgroundColor: '#F4F8FD',
-    borderTopWidth: 1,
-    borderTopColor: 'white',//'#D3DCE6',
-  },
-  footerText: {
-    fontSize: 12,
-    color: '#888',
-  },
-  footerImage: {
-    width: 50,
-    height: 50,
-    marginBottom: 5,
-  },
-});
+const Drawer = createDrawerNavigator();
+
 const CustomDrawerContent = (props) => {
   const navigation = useNavigation();
 
@@ -65,7 +37,8 @@ const CustomDrawerContent = (props) => {
       <View style={{ alignItems: 'center', marginVertical: 20 }}>
         <Image source={LogoName} style={{ width: 140, height: 40 }} />
       </View>
-      {renderDrawerItem('bag-remove-sharp','Change Location',()=>navigation.navigate('Main2'))}
+      {renderDrawerItem('search','Identify Plant',()=>navigation.navigate('Home'))}
+      {renderDrawerItem('location','Change Location',()=>navigation.navigate('Main2'))}
       {renderDrawerItem('person-outline', 'User', () => navigation.navigate('User'))}
       {renderDrawerItem('information-circle-outline', 'Support', handleSupportPress)}
       {renderDrawerItem('help-circle-outline', 'About', () => navigation.navigate('About'))}
@@ -111,5 +84,34 @@ const DrawerScreen = () => {
     
   );
 };
+const styles = StyleSheet.create({
+  drawerItemContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 20,
+    marginLeft: 16,
+  },
+  drawerItemText: {
+    fontSize: 16,
+    color: '#333',
+    marginLeft: 16,
+  },
+  footer: {
+    alignItems: 'center',
+    paddingVertical: 150,
+    //backgroundColor: '#F4F8FD',
+    borderTopWidth: 1,
+    borderTopColor: 'white',//'#D3DCE6',
+  },
+  footerText: {
+    fontSize: 12,
+    color: '#888',
+  },
+  footerImage: {
+    width: 50,
+    height: 50,
+    marginBottom: 5,
+  },
+});
 
 export default DrawerScreen;

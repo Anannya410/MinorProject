@@ -6,10 +6,11 @@ import SignInScreen from '../screens/SignInScreen';
 import SignUpScreen from '../screens/SignUpScreen';
 import SplashScreen from '../screens/SplashScreen';
 import SupportScreen from '../screens/SupportScreen';
-import MainScreen from "../screens/MainScreen/MainScreen";
+import MainScreen from "../screens/LandingPage/LandingPage";
 import MainScreen2 from "../screens/MainScreen2/MainScreen2.js"
 import DrawerScreen from "../screens/DrawerScreen"; 
 import ParentScreen from "../screens/ParentScreen";
+import ChildScreen from "../screens/ChildScreen/ChildScreen"
 import AboutScreen from '../screens/AboutScreen';
 import SignOutScreen from '../screens/SignOutScreen/SignOutScreen';
 import UserScreen from '../screens/UserScreen/UserScreen';
@@ -17,8 +18,12 @@ import Terms_PrivacyScreen from '../screens/Terms_PrivacyScreen/Terms_PrivacyScr
 import RegisterSuccessAnimation from "../screens/RegistrationSuccessAnimation/RegistrationSuccessAnimation";
 import DataScreen from '../screens/DataScreen/DataScreen';
 import VerifyOTP from '../screens/VerifyOTPScreen/VerifyOTPScreen';
-import HomeScreen from '../screens/HomeScreen/HomeScreen';
+import HomeScreen from '../screens/IdentifyPlant/IdentifyPlant';
 import WeatherScreen from '../screens/WeatherScreen/WeatherScreen';
+import BottomNavigator from '../screens/BottomNavigator/BottomNavigator.js';
+import IdentifyPlant from '../screens/IdentifyPlant/IdentifyPlant.js';
+import LandingPage from '../screens/LandingPage/LandingPage.js';
+
 const Stack = createNativeStackNavigator();
 const Navigation = () => {
   return (
@@ -30,6 +35,7 @@ const Navigation = () => {
         <Stack.Screen name="Main" component={MainScreen} />
         <Stack.Screen name="Main2" component={MainScreen2}/>
         <Stack.Screen name="Parent" component={ParentScreen} />
+        <Stack.Screen name="Child" component={ChildScreen}/>
         <Stack.Screen name="Support" component={SupportScreen} />
         <Stack.Screen name="Drawer" component={DrawerScreen} />
         <Stack.Screen name="About" component={AboutScreen}/>
@@ -39,8 +45,11 @@ const Navigation = () => {
         <Stack.Screen name = "RegisterSuccess" component ={RegisterSuccessAnimation} />
         <Stack.Screen name= "DataScreen" component ={DataScreen}/>
         <Stack.Screen name= "VerifyOTP" component = {VerifyOTP}/>
-        <Stack.Screen name= "HomeScreen" component = {HomeScreen}/>
+        <Stack.Screen name= "Home" component = {HomeScreen}/>
         <Stack.Screen name= "Weather" component = {WeatherScreen}/>
+        <Stack.Screen name= "Bottom" component = {BottomNavigator}/>
+        <Stack.Screen name = "Identify" component = {IdentifyPlant}/>
+        <Stack.Screen name = "Land" component = {LandingPage}/>
       </Stack.Navigator>
     </NavigationContainer>
   );

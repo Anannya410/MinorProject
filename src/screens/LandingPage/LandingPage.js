@@ -54,7 +54,9 @@ const MainScreen = ({ navigation }) => {
   return (
     <View style={styles.container}>
 
-      <ScrollView style={styles.scrollView}>
+        <ChildScreen/>
+
+      {/* <ScrollView style={styles.scrollView}>
         {images.map((image, index) => (
           <TouchableOpacity
             key={index}
@@ -68,7 +70,7 @@ const MainScreen = ({ navigation }) => {
           </TouchableOpacity>
         ))}
         
-      </ScrollView>
+      </ScrollView> */}
     
     </View>
   );
